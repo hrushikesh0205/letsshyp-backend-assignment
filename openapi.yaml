@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: LetsShyp Backend API
+  description: Backend service for courier allocation and order lifecycle management
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Server is running
+
+  /couriers:
+    get:
+      summary: Get all couriers
+      responses:
+        '200':
+          description: List of couriers
+
+  /orders:
+    post:
+      summary: Create a new order
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pickup:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                    y:
+                      type: number
+                drop:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                    y:
+                      type: number
+                deliveryType:
+                  type: string
+                  example: NORMAL
+      responses:
+        '201':
+          description: Order created successfully
+
+  /orders/{id}/status:
+    post:
+      summary: Update order status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: PICKED_UP
+      responses:
+        '200':
+          description: Order status updated
+
+  /orders/{id}/cancel:
+    post:
+      summary: Cancel an order
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Order cancelled successfully
